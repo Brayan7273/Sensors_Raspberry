@@ -1,0 +1,36 @@
+from machine import Pin, SoftI2C
+from time import sleep
+import ssd1306
+
+# Configuración de pines
+flame_digital_pin = Pin(34, Pin.IN)  # Pin digital del sensor de llama
+flame_analog_pin = Pin(35, Pin.IN)   # Pin analógico del sensor de llama
+
+# Configuración del bus I2C y la pantalla OLED
+i2c = SoftI2C(sda=Pin(21), scl=Pin(22))
+oled = ssd1306.SSD1306_I2C(128, 64, i2c)
+
+while True:
+    # Leer el estado del sensor de llama (digital)
+    flame_digital_detected = flame_digital_pin.value()
+
+    # Leer el valor de la salida analógica del sensor de llama
+    flame_analog_value = flame_analog_pin.value()
+
+    # Limpiar la pantalla
+    oled.fill(0)
+
+    # Mostrar el estado del sensor en la pantalla OLED
+    if flame_digital_detected:
+        oled.text("Llama detectada", 10, 10)
+    else:
+        oled.text("No se detecta llama", 10, 10)
+
+    oled.text("Valor analógico:", 10, 30)
+    oled.text(str(flame_analog_value), 10, 40)
+
+    # Actualizar la pantalla
+    oled.show()
+
+    # Esperar un corto período antes de la próxima lectura
+    sleep(0.5)
