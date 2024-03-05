@@ -1,0 +1,27 @@
+from machine import Pin, SoftI2C
+from time import sleep
+import ssd1306
+
+# Configuración de pines
+i2c = SoftI2C(sda=Pin(21), scl=Pin(22))
+sound_analog_pin = Pin(34, Pin.IN)  # Pin de salida analógica
+sound_digital_pin = Pin(35, Pin.IN)  # Pin de salida digital
+
+# Objeto de la pantalla OLED
+display = ssd1306.SSD1306_I2C(128, 64, i2c)
+
+while True:
+    # Leer el valor del pin de salida analógica
+    analog_value = sound_analog_pin.value()
+
+    # Leer el valor del pin de salida digital
+    digital_value = sound_digital_pin.value()
+
+    # Actualizar la pantalla con los valores de ambas salidas
+    display.fill(0)
+    display.text("Analog Sound: {}".format(analog_value), 10, 10, 1)
+    display.text("Digital Sound: {}".format(digital_value), 10, 20, 1)
+    display.show()
+
+    # Esperar un corto tiempo antes de la próxima iteración
+    sleep(0.1)
