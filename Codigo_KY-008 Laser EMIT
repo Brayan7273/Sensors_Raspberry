@@ -1,0 +1,22 @@
+from machine import Pin, SoftI2C, ADC
+from time import sleep
+import ssd1306
+
+# Configuración de pines
+i2c = SoftI2C(sda=Pin(21), scl=Pin(22))
+light_sensor_pin = ADC(Pin(32))
+
+# Objeto de la pantalla OLED
+display = ssd1306.SSD1306_I2C(128, 64, i2c)
+
+while True:
+    # Leer el valor del sensor de luz
+    light_value = light_sensor_pin.read()
+
+    # Actualizar la pantalla con el valor del sensor de luz
+    display.fill(0)
+    display.text("Light Value: {}".format(light_value), 10, 10, 1)
+    display.show()
+
+    # Esperar un corto tiempo antes de la próxima iteración
+    sleep(0.1)
