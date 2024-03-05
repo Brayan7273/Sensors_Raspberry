@@ -1,0 +1,27 @@
+from machine import Pin, SoftI2C
+from time import sleep
+import ssd1306
+
+# Configuración de pines
+i2c = SoftI2C(sda=Pin(21), scl=Pin(22))
+button_pin = Pin(14, Pin.IN)
+
+# Objeto de la pantalla OLED
+display = ssd1306.SSD1306_I2C(128, 64, i2c)
+
+while True:
+    # Verificar el estado del botón
+    button_state = button_pin.value()
+
+    # Actualizar la pantalla dependiendo del estado del botón
+    if button_state == 1:
+        display.fill(0)
+        display.text("Button: 1", 10, 20, 1)
+        display.show()
+    else:
+        display.fill(0)
+        display.text("Button: 0", 10, 20, 1)
+        display.show()
+
+    # Esperar un corto tiempo antes de la próxima iteración
+    sleep(0.1)
