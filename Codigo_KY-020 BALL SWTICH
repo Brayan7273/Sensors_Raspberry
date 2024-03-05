@@ -1,0 +1,25 @@
+from machine import Pin, SoftI2C
+from time import sleep
+import ssd1306
+
+# Configuración de pines
+i2c = SoftI2C(sda=Pin(21), scl=Pin(22))
+ball_switch_pin = Pin(34, Pin.IN)  # Pin donde está conectado el ball switch
+
+# Objeto de la pantalla OLED
+display = ssd1306.SSD1306_I2C(128, 64, i2c)
+
+while True:
+    # Leer el estado del ball switch
+    switch_state = ball_switch_pin.value()
+
+    # Actualizar la pantalla con el estado del ball switch
+    display.fill(0)
+    if switch_state == 1:
+        display.text("Ball Switch: ON", 10, 10, 1)
+    else:
+        display.text("Ball Switch: OFF", 10, 10, 1)
+    display.show()
+
+    # Esperar un corto tiempo antes de la próxima iteración
+    sleep(0.1)
